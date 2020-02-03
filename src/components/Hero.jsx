@@ -1,6 +1,6 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import HeroImage from "../images/hero.jpg";
+import RegistrationForm from "./RegistrationForm";
 
 export default function Hero() {
   return (
@@ -9,6 +9,17 @@ export default function Hero() {
         backgroundImage: "url(" + HeroImage + ")",
         height: "1000px"
       }}
-    ></div>
+    >
+      <div
+        style={{
+          backgroundColor: "white",
+          height: "25em",
+          width: "25em",
+          opacity: "0.5"
+        }}
+      >
+        <RegistrationForm />
+      </div>
+    </div>
   );
 }
