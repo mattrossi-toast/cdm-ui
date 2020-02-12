@@ -73,10 +73,15 @@ export default class RegistrationForm extends Component {
       this.state.passwordValue === this.state.passwordConfValue &&
       this.emailIsValid(this.state.emailValue)
     ) {
-      register(`{
-      "email": "${this.state.emailValue}"
-      "password": "${this.state.passwordValue}"
-    }`);
+      register(
+        "https://5kdnwwjgw6.execute-api.us-east-1.amazonaws.com/prod",
+        `{
+         "email": "${this.state.emailValue}",
+         "password": "${this.state.passwordValue}"
+        }`
+      ).then(response => {
+        console.log("data: " + JSON.stringify(response));
+      });
     }
   }
 

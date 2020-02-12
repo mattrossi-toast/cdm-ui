@@ -1,10 +1,11 @@
-export const register = body => {
-  return fetch({
+export async function register(url, body) {
+  const response = await fetch(url, {
     method: "POST",
-    url: `https://xhs60uhqtl.execute-api.us-east-1.amazonaws.com`,
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify(body)
+    body: body
   });
-};
+
+  return response;
+}
