@@ -45,7 +45,6 @@ export default class CampaignIdSelect extends Component {
       "https://39em985zy4.execute-api.us-east-1.amazonaws.com/prod/c4e0077c-3f5f-48ed-a423-bb58d6de47db"
     ).then(response =>
       response.json().then(json => {
-        console.log(json);
         return json;
       })
     );

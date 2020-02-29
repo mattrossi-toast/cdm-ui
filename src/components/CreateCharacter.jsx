@@ -9,6 +9,8 @@ import BackgroundSelect from "./BackgroundSelect";
 import RaceSelect from "./RaceSelect";
 import AlignmentSelect from "./AlignmentSelect";
 import Modal from "./SetInventoryModal";
+import insertInventory from "../services/inventoryService";
+import UserProfile from "./UserProfile";
 export default class CreateCharacter extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +34,7 @@ export default class CreateCharacter extends Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.setInventory = this.setInventory.bind(this);
+    this.handleInventoryChange = this.handleInventoryChange.bind(this);
 
     this.state = {
       campaignId: "",
@@ -57,8 +60,6 @@ export default class CreateCharacter extends Component {
       ideals: "Ideals",
       bonds: "Bonds",
       flaws: "Flaws",
-      //  inventory: "Inventory", //should open items menu
-      //  attacks: "Attacks", // should open attacks menu
       //  spells: "Spells", // should open spells menu
       features: "Features"
     };
@@ -118,8 +119,14 @@ export default class CreateCharacter extends Component {
           type="number"
           onChange={this.handleCharismaChange}
         />
-        <Modal show={this.state.showModal} onClose={this.toggleModal} />
-        <Button onClick={this.setInventory}> Set Inventory </Button>
+        <Modal
+          show={this.state.showModal}
+          onClose={this.toggleModal}
+          handleChange={this.handleInventoryChange}
+        />
+        <Button onClick={this.setInventory}>
+          {this.state.showModal ? "Submit" : "Show Inventory"}
+        </Button>
         {items}
 
         <Button onClick={this.handleClick}>Create Character</Button>
@@ -127,10 +134,14 @@ export default class CreateCharacter extends Component {
     );
   }
 
+  handleInventoryChange(event) {
+    const inventory = [];
+    inventory.push(event);
+    this.setState({ inventory: inventory });
+  }
+
   handleCampainIdChange(event) {
-    console.log("HEY" + event);
     this.setState({ campaignId: event });
-    console.log("Ya" + JSON.stringify(this.state));
   }
   handleClassChange(event) {
     this.setState({ class: event });
@@ -189,13 +200,27 @@ export default class CreateCharacter extends Component {
     this.setState({ showModal: true });
   }
   async handleClick() {
-    console.log(this.state);
+    const userId = UserProfile.getId();
+    const inventory = this.state.inventory[0];
+    inventory.forEach(async item => {
+      var response = await insertInventory(
+        "https://7l00an9o98.execute-api.us-east-1.amazonaws.com/prod",
+        `{
+          "itemId": "${item}",
+          "userId": "${userId}"
+        }`
+      ).then(response =>
+        response.json().then(json => {
+          console.log(json);
+          return json;
+        })
+      );
+    });
     var response = await createCharacter(
       "https://s252apte2g.execute-api.us-east-1.amazonaws.com/prod",
       JSON.stringify(this.state)
     ).then(response =>
       response.json().then(json => {
-        console.log(json);
         return json;
       })
     );

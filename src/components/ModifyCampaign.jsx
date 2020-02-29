@@ -38,7 +38,6 @@ export default class Dashboard extends Component {
         UserProfile.getId()
     ).then(response =>
       response.json().then(json => {
-        console.log(json);
         return json;
       })
     );

@@ -32,7 +32,6 @@ export default class Dashboard extends Component {
        }`
     ).then(response =>
       response.json().then(json => {
-        console.log(json);
         return json;
       })
     );

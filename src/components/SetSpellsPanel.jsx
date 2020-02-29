@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import getItems from "../services/itemService";
+import getSpells from "../services/spellService";
 import {
   FormControlLabel,
   FormGroup,
@@ -8,7 +8,7 @@ import {
   FormLabel
 } from "@material-ui/core";
 
-class Modal extends React.Component {
+class SetSpellsPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,7 +39,7 @@ class Modal extends React.Component {
       margin: "0 auto",
       padding: 30
     };
-    const weapons = [];
+    /*const weapons = [];
     if (this.state.weapons) {
       const entries = Object.entries(this.state.weapons);
       console.log(entries);
@@ -74,7 +74,7 @@ class Modal extends React.Component {
           />
         );
       }
-    }
+    }*/
     return (
       <div className="backdrop" style={{ backdropStyle }}>
         <div className="modal" style={{ modalStyle }}>
@@ -87,14 +87,15 @@ class Modal extends React.Component {
     );
   }
   async componentDidMount() {
-    var items = await getItems(
-      " https://xutv9xlkq7.execute-api.us-east-1.amazonaws.com/prod"
+    var items = await getSpells(
+      "https://mx0qmr0p0m.execute-api.us-east-1.amazonaws.com/prod"
     ).then(response =>
       response.json().then(json => {
         return json;
       })
     );
-    var weapons = [];
+    console.log(items);
+    /*var weapons = [];
     var armor = [];
     const entries = Object.entries(items.Items);
     for (const item of entries) {
@@ -105,7 +106,7 @@ class Modal extends React.Component {
       }
     }
     this.setState({ weapons: weapons });
-    this.setState({ armor: armor });
+    this.setState({ armor: armor });*/
   }
   handleChange(event) {
     const options = this.state.options;
