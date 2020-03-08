@@ -1,0 +1,16 @@
+body,
+#root {
+  font-family: Montserrat, sans-serif;
+  background-color: #f6f5f6;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: local("Montserrat"), url(./fonts/Montserrat-Black.ttf) format("truetype");
+}
+
+html,
+body,
+#app,
+#app > div {
+  height: 100%;
+}

@@ -44,10 +44,16 @@ class Modal extends React.Component {
       const entries = Object.entries(this.state.weapons);
       console.log(entries);
       for (const entry of entries) {
+        if (this.props.value.includes(entry[1]["uuid"]["S"])) {
+          this.state.options.push(entry[1]["uuid"]["S"]);
+        }
         weapons.push(
           <FormControlLabel
             control={
               <Checkbox
+                defaultChecked={this.props.value.includes(
+                  entry[1]["uuid"]["S"]
+                )}
                 onChange={this.handleChange}
                 value={entry[1]["uuid"]["S"]}
               />
@@ -62,10 +68,16 @@ class Modal extends React.Component {
       const entries = Object.entries(this.state.armor);
       console.log(entries);
       for (const entry of entries) {
+        if (this.props.value.includes(entry[1]["uuid"]["S"])) {
+          this.state.options.push(entry[1]["uuid"]["S"]);
+        }
         armor.push(
           <FormControlLabel
             control={
               <Checkbox
+                defaultChecked={this.props.value.includes(
+                  entry[1]["uuid"]["S"]
+                )}
                 onChange={this.handleChange}
                 value={entry[1]["uuid"]["S"]}
               />
@@ -111,10 +123,13 @@ class Modal extends React.Component {
     const options = this.state.options;
     let index;
     if (event.target.checked) {
+      this.props.value.push(event.target.value);
       options.push(event.target.value);
     } else {
       index = options.indexOf(event.target.value);
       options.splice(index, 1);
+      index = this.props.value.indexOf(event.target.value);
+      this.props.value.splice(index, 1);
     }
     this.setState({ options: options });
     this.props.handleChange(this.state.options);

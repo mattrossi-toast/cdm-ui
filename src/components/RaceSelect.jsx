@@ -40,10 +40,12 @@ export default class RaceSelect extends Component {
     };
   }
   render() {
+    console.log("Race: " + this.props.value);
     return (
       <BaseSelect
         handleChange={this.props.handleChange}
         items={this.state.items}
+        value={this.props.value}
         label="Race"
       ></BaseSelect>
     );

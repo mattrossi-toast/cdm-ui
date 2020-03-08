@@ -11,12 +11,7 @@ export default class CharacterAttribute extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
   render() {
-    return (
-      <Fragment>
-        <p>{this.props.friendlyValue}:</p>
-        <TextField onChange={this.handleChange}></TextField>
-      </Fragment>
-    );
+    return <Fragment></Fragment>;
   }
 
   handleChange(event) {

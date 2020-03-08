@@ -44,6 +44,7 @@ export default class AlignmentSelect extends Component {
       <BaseSelect
         handleChange={this.props.handleChange}
         items={this.state.items}
+        value={this.props.value}
         label="Alignment"
       ></BaseSelect>
     );

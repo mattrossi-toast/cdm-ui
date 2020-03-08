@@ -6,3 +6,12 @@ export default async function getSpells(url) {
   });
   return response;
 }
+export async function insertCharacterSpell(url, body) {
+  const response = await fetch(url, {
+    method: "POST",
+    body: body
+  }).then(response => {
+    return response;
+  });
+  return response;
+}

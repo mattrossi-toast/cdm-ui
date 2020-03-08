@@ -16,3 +16,12 @@ export async function getUserCampaigns(url) {
   });
   return response;
 }
+
+export async function getCampaignPlayers(url) {
+  const response = await fetch(url, {
+    method: "GET"
+  }).then(response => {
+    return response;
+  });
+  return response;
+}

@@ -77,11 +77,10 @@ export default class RegistrationForm extends Component {
         "https://5kdnwwjgw6.execute-api.us-east-1.amazonaws.com/prod",
         `{
          "email": "${this.state.emailValue}",
-         "password": "${this.state.passwordValue}"
+         "password": "${this.state.passwordValue}",
+         "dm": "true"
         }`
-      ).then(response => {
-        console.log("data: " + JSON.stringify(response));
-      });
+      ).then(response => {});
     }
   }
 

@@ -8,7 +8,7 @@ import {
   FormLabel
 } from "@material-ui/core";
 
-class SetSpellsPanel extends React.Component {
+export default class SetSpellsPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,49 +39,34 @@ class SetSpellsPanel extends React.Component {
       margin: "0 auto",
       padding: 30
     };
-    /*const weapons = [];
-    if (this.state.weapons) {
-      const entries = Object.entries(this.state.weapons);
-      console.log(entries);
+
+    const spells = [];
+    if (this.state.spells) {
+      const entries = Object.entries(this.state.spells);
+
       for (const entry of entries) {
-        weapons.push(
-          <FormControlLabel
-            control={
-              <Checkbox
-                onChange={this.handleChange}
-                value={entry[1]["uuid"]["S"]}
-              />
-            }
-            label={entry[1]["name"]["S"]}
-          />
-        );
+        if (entry[1]["class"]["S"] === this.props.class) {
+          spells.push(
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={this.handleChange}
+                  value={entry[1]["spellId"]["S"]}
+                />
+              }
+              label={
+                entry[1]["name"]["S"] + ": " + entry[1]["description"]["S"]
+              }
+            />
+          );
+        }
       }
     }
-    const armor = [];
-    if (this.state.armor) {
-      const entries = Object.entries(this.state.armor);
-      console.log(entries);
-      for (const entry of entries) {
-        armor.push(
-          <FormControlLabel
-            control={
-              <Checkbox
-                onChange={this.handleChange}
-                value={entry[1]["uuid"]["S"]}
-              />
-            }
-            label={entry[1]["name"]["S"]}
-          />
-        );
-      }
-    }*/
     return (
       <div className="backdrop" style={{ backdropStyle }}>
         <div className="modal" style={{ modalStyle }}>
-          <FormLabel component="legend">Weapons</FormLabel>
-          <FormGroup>{weapons}</FormGroup>
-          <FormLabel component="legend">Armor</FormLabel>
-          <FormGroup>{armor}</FormGroup>
+          <FormLabel component="legend">Spells</FormLabel>
+          <FormGroup>{spells}</FormGroup>
         </div>
       </div>
     );
@@ -94,19 +79,13 @@ class SetSpellsPanel extends React.Component {
         return json;
       })
     );
-    console.log(items);
-    /*var weapons = [];
-    var armor = [];
+
+    var spells = [];
     const entries = Object.entries(items.Items);
     for (const item of entries) {
-      if (item[1]["type"]["S"] === "weapon") {
-        weapons.push(item[1]);
-      } else {
-        armor.push(item[1]);
-      }
+      spells.push(item[1]);
     }
-    this.setState({ weapons: weapons });
-    this.setState({ armor: armor });*/
+    this.setState({ spells: spells });
   }
   handleChange(event) {
     const options = this.state.options;
@@ -121,11 +100,3 @@ class SetSpellsPanel extends React.Component {
     this.props.handleChange(this.state.options);
   }
 }
-
-Modal.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  show: PropTypes.bool,
-  children: PropTypes.node
-};
-
-export default Modal;

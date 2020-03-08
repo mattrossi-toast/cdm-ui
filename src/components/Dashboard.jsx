@@ -7,6 +7,7 @@ export default class Dashboard extends Component {
     return (
       <Fragment>
         <Navbar isLoggedIn={true}></Navbar>
+        <h1>{this.props.test}</h1>
         <CampaignServices />
         <CharacterServices />
       </Fragment>

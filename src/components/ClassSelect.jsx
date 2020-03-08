@@ -48,6 +48,7 @@ export default class ClassSelect extends Component {
         handleChange={this.props.handleChange}
         items={this.state.items}
         label="Class"
+        value={this.props.value}
       ></BaseSelect>
     );
   }

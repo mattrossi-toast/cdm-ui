@@ -7,6 +7,9 @@ import Dashboard from "./components/Dashboard";
 import CreateCampaign from "./components/CreateCampaign";
 import ModifyCampaign from "./components/ModifyCampaign";
 import CreateCharacter from "./components/CreateCharacter";
+import ViewCharacters from "./components/ViewCharacters";
+import ModifyCharacter from "./components/ModifyCharacter"
+import './fonts/Montserrat-Black.ttf'
 
 ReactDOM.render(
   <Router>
@@ -15,6 +18,10 @@ ReactDOM.render(
     <Route path="/create-campaign" exact component={CreateCampaign}></Route>
     <Route path="/modify-campaign" exact component={ModifyCampaign}></Route>
     <Route path="/create-character" exact component={CreateCharacter}></Route>
+    <Route path="/create-npc" exact component={CreateCharacter}></Route>
+    <Route path="/view-characters" exact component={ViewCharacters}></Route>
+    <Route path="/view-character"
+      exact component={ModifyCharacter}></Route>
   </Router>,
   document.getElementById("root")
 );

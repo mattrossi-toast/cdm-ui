@@ -7,6 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/core/Icon";
 import Logo from "../images/logo.png";
 import Login from "./Login";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,8 +22,22 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default class ButtonAppBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      redirect: false
+    };
+    this.handleRedirect = this.handleRedirect.bind(this);
+  }
   render() {
     const classes = useStyles;
+    if (this.state.redirect) {
+      return (
+        <div>
+          <Redirect push to="/dashboard" />
+        </div>
+      );
+    }
     return (
       <AppBar
         position="static"
@@ -47,11 +62,16 @@ export default class ButtonAppBar extends Component {
               alt="Critical DM Logo"
               style={{ height: "70px", width: "100px" }}
               edge="start"
+              onClick={this.handleRedirect}
             />
           </Typography>
           {this.props.isLoggedIn ? <span /> : <Login />}
         </Toolbar>
       </AppBar>
     );
+  }
+
+  handleRedirect() {
+    this.setState({ redirect: true });
   }
 }

@@ -5,10 +5,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import { getUserCampaigns } from "../services/campaignService";
+
 import UserProfile from "./UserProfile";
 import SelectInput from "@material-ui/core/Select/SelectInput";
-import BaseSelect from "./BaseSelect";
+import BaseCharacterSelect from "./BaseCharacterSelect";
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -22,34 +22,22 @@ const useStyles = makeStyles(theme =>
   })
 );
 
-export default class BackgroundSelect extends Component {
+export default class CampaignCharacterSelect extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      items: {
-        acolyte: "Acolyte",
-        criminal: "Criminal",
-        folkHero: "Folk Hero",
-        noble: "Noble",
-        sage: "Sage",
-        soldier: "Soldier"
-      }
+      items: {}
     };
   }
   render() {
-    const key = this.getKeyByValue(this.state.items, this.props.value);
-
+    console.log(this.props.value);
     return (
-      <BaseSelect
+      <BaseCharacterSelect
         handleChange={this.props.handleChange}
-        items={this.state.items}
+        label="Player"
+        items={this.props.items}
         value={this.props.value}
-        label="Background"
-      ></BaseSelect>
+      ></BaseCharacterSelect>
     );
-  }
-
-  getKeyByValue(object, value) {
-    return Object.keys(object).find(key => object[key] === value);
   }
 }

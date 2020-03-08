@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme =>
   })
 );
 
-export default class BaseSelect extends Component {
+export default class BaseCampaignSelect extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,10 +32,15 @@ export default class BaseSelect extends Component {
   render() {
     var items = [];
     const entries = Object.entries(this.props.items);
-    console.log("Reeee: " + this.props.value);
+
     for (const entry of entries) {
-      items.push(<MenuItem value={entry[1]}> {entry[1]} </MenuItem>);
+      items.push(
+        <MenuItem value={entry[1]["uuid"]["S"]}>
+          {entry[1]["campaignName"]["S"]}
+        </MenuItem>
+      );
     }
+
     return (
       <FormControl onSubmit={this.handleSubmit} className={useStyles}>
         <InputLabel id="demo-simple-select-label">
