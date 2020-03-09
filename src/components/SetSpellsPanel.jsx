@@ -43,14 +43,25 @@ export default class SetSpellsPanel extends React.Component {
     const spells = [];
     if (this.state.spells) {
       const entries = Object.entries(this.state.spells);
-
+      console.log("Spells Value: " + JSON.stringify(this.props.value));
       for (const entry of entries) {
+        console.log("Spell Entry: " + JSON.stringify(entry));
+        if (
+          this.props.value &&
+          this.props.value.includes(entry[1]["spellId"]["S"])
+        ) {
+          this.state.options.push(entry[1]["spellId"]["S"]);
+        }
         if (entry[1]["class"]["S"] === this.props.class) {
           spells.push(
             <FormControlLabel
               control={
                 <Checkbox
                   onChange={this.handleChange}
+                  defaultChecked={
+                    this.props.value &&
+                    this.props.value.includes(entry[1]["spellId"]["S"])
+                  }
                   value={entry[1]["spellId"]["S"]}
                 />
               }
@@ -88,15 +99,29 @@ export default class SetSpellsPanel extends React.Component {
     this.setState({ spells: spells });
   }
   handleChange(event) {
-    const options = this.state.options;
+    const options = this.props.value
+      ? this.removeDuplicates(this.props.value)
+      : [];
     let index;
     if (event.target.checked) {
+      if (this.props.value) {
+        this.props.value.push(event.target.value);
+      }
       options.push(event.target.value);
     } else {
       index = options.indexOf(event.target.value);
       options.splice(index, 1);
+      if (this.props.value) {
+        index = this.props.value.indexOf(event.target.value);
+        this.props.value.splice(index, 1);
+      }
+      console.log("Item unchecked: " + options);
     }
+    console.log("Options: " + options);
     this.setState({ options: options });
-    this.props.handleChange(this.state.options);
+    this.props.handleChange(this.removeDuplicates(options));
+  }
+  removeDuplicates(array) {
+    return array.filter((a, b) => array.indexOf(a) === b);
   }
 }

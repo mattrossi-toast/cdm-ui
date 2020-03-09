@@ -1,12 +1,16 @@
-var UserProfile = (function() {
+import Cookies from 'universal-cookie'
+var UserProfile = (function () {
   var userId = "";
 
-  var getId = function() {
-    return "c4e0077c-3f5f-48ed-a423-bb58d6de47db";
+  const cookies = new Cookies()
+  var getId = function () {
+    console.log(cookies.get('userId'))
+    return cookies.get('userId')
   };
 
-  var setId = function(newUserId) {
+  var setId = function (newUserId) {
     userId = newUserId;
+    cookies.set('userId', newUserId, { path: "/" })
   };
 
   return {

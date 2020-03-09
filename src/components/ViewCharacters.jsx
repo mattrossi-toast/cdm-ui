@@ -14,6 +14,10 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 export default class ViewCharacters extends Component {
   constructor(props) {
@@ -23,7 +27,9 @@ export default class ViewCharacters extends Component {
       campaigns: [],
       redirect: false
     };
+    this.handleChange = this.handleChange.bind(this);
   }
+
   render() {
     if (this.state.redirect) {
       return (
@@ -44,6 +50,17 @@ export default class ViewCharacters extends Component {
     return (
       <Fragment>
         <Navbar isLoggedIn={true}></Navbar>
+        <br></br>
+        <ButtonGroup color="primary" aria-label="outlined primary button group">
+          <Button onClick={this.handleChange}>My Characters</Button>
+          <Button
+            onClick={() =>
+              this.setState({ characters: this.state.allCharacters })
+            }
+          >
+            All Characters
+          </Button>
+        </ButtonGroup>
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
@@ -53,6 +70,8 @@ export default class ViewCharacters extends Component {
                 <TableCell align="right">Race</TableCell>
                 <TableCell align="right">Class</TableCell>
                 <TableCell align="right">Player</TableCell>
+                <TableCell align="right">Edit</TableCell>
+                <TableCell align="right">View</TableCell>
               </TableRow>
             </TableHead>
             <TableBody> {items}</TableBody>
@@ -60,6 +79,10 @@ export default class ViewCharacters extends Component {
         </TableContainer>
       </Fragment>
     );
+  }
+
+  toggleHover() {
+    this.setState({ hover: !this.state.hover });
   }
 
   async componentDidMount() {
@@ -73,8 +96,23 @@ export default class ViewCharacters extends Component {
         return json;
       })
     );
-    var items = characters.Items;
+    console.log("Characters: " + JSON.stringify(characters));
+    var items = characters[0].Items;
+
     this.setState({ characters: items });
+    this.setState({ allCharacters: items });
     console.log(items);
+  }
+  handleChange() {
+    const characters = [];
+    if (this.state.characters) {
+      this.state.characters.forEach(item => {
+        console.log(UserProfile.getId());
+        if (item["playerId"]["S"] == UserProfile.getId()) {
+          characters.push(item);
+        }
+      });
+    }
+    this.setState({ characters: characters });
   }
 }

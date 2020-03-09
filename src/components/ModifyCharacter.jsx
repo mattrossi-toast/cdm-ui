@@ -16,8 +16,18 @@ import SpellsButton from "./SpellsButton";
 import { insertCharacterSpell } from "../services/spellService";
 import CampaignCharacterSelect from "./CampaignCharacterSelect";
 import { getCampaignPlayers } from "../services/campaignService";
-import { getCharacterInventory } from "../services/characterService";
+import {
+  getCharacterInventory,
+  deleteCharacterInventory,
+  getCharacterSpells,
+  deleteCharacterSpell
+} from "../services/characterService";
 import { Redirect } from "react-router-dom";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import { LinearProgress } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import Fade from "@material-ui/core/Fade";
 
 export default class ModifyCharacter extends Component {
   constructor(props) {
@@ -51,7 +61,9 @@ export default class ModifyCharacter extends Component {
         items: [],
         campaignId: this.props.location.state.character["campaignId"]["S"],
         class: this.props.location.state.character["class"]["S"],
-        background: this.props.location.state.character["background"]["S"],
+        background: this.props.location.state.character["background"]
+          ? this.props.location.state.character["background"]["S"]
+          : "",
         level: this.props.location.state.character["level"]["S"],
         race: this.props.location.state.character["race"]["S"],
         alignment: this.props.location.state.character["alignment"]["S"],
@@ -74,6 +86,20 @@ export default class ModifyCharacter extends Component {
     }
   }
   render() {
+    const useStyles = makeStyles(theme => ({
+      root: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+      },
+      button: {
+        margin: theme.spacing(2)
+      },
+      placeholder: {
+        height: 40
+      }
+    }));
+    const classes = useStyles;
     if (this.state.redirect) {
       return <Redirect push to="/dashboard" />;
     }
@@ -111,7 +137,7 @@ export default class ModifyCharacter extends Component {
     return (
       <Fragment>
         <Navbar isLoggedIn={true}></Navbar>
-        <h2>Modify Character</h2>
+        <h2 style={{ fontFamily: "Montserrat" }}>Modify Character</h2>
         <SimpleSelect
           value={
             this.props.location.state.character["campaignId"]["S"]
@@ -217,6 +243,7 @@ export default class ModifyCharacter extends Component {
           onClose={this.toggleSpellPanel}
           handleChange={this.handleSpellsChange}
           class={this.state.class.toLowerCase()}
+          value={this.state.characterSpells}
         />
         <SpellsButton
           onClick={this.setSpell}
@@ -226,16 +253,45 @@ export default class ModifyCharacter extends Component {
           showModal={this.state.showSpellsPanel}
         ></SpellsButton>
         <Button onClick={this.handleClick}>Modify Character</Button>
+        <div className={classes.placeholder}>
+          <Fade
+            in={this.state.loadingRegister}
+            style={{
+              transitionDelay: this.state.loadingRegister ? "800ms" : "0ms"
+            }}
+            unmountOnExit
+          >
+            <LinearProgress />
+          </Fade>
+        </div>
+        <Snackbar
+          style={{ opacity: 1 }}
+          open={this.state.registerSuccessOpen}
+          autoHideDuration={3000}
+          onClose={() => this.setState({ registerSuccessOpen: false })}
+        >
+          <MuiAlert
+            style={{ opacity: 1 }}
+            elevation={6}
+            variant="filled"
+            severity="success"
+            onClose={() => this.setState({ registerSuccessOpen: false })}
+          >
+            Character Updated!
+          </MuiAlert>
+        </Snackbar>
       </Fragment>
     );
   }
 
   handleInventoryChange(event) {
     const inventory = [];
-    console.log("inventory changed!");
-    inventory.push(event);
+    this.setState({ inventory: [] });
+    event.forEach(item => {
+      inventory.push(item);
+    });
+
     this.setState({ inventory: inventory });
-    console.log("Inventory: " + inventory);
   }
 
   async handleCampaignIdChange(event) {
@@ -318,12 +374,11 @@ export default class ModifyCharacter extends Component {
   }
 
   handlePlayerChange(event) {
-    console.log("Event: " + event);
-
     this.setState({ playerId: event });
   }
 
   async handleClick() {
+    this.setState({ loadingRegister: true });
     var response = await createCharacter(
       "https://f0j4l488d0.execute-api.us-east-1.amazonaws.com/prod/",
       JSON.stringify(this.state)
@@ -332,18 +387,49 @@ export default class ModifyCharacter extends Component {
         return json;
       })
     );
+    await this.insertSpellChanges();
     console.log("Complete");
     await this.insertInventoryChanges(this.state.uuid);
+    this.setState({ loadingRegister: false });
+    this.setState({ registerSuccessOpen: true });
   }
+  async insertSpellChanges() {
+    console.log("Spells: " + this.state.spells);
+    if (this.state.spells) {
+      const spells = this.state.spells[0];
+      const prevSpells = this.state.characterSpellUUIDs;
+      prevSpells.forEach(async item => {
+        console.log("Previous Inventory Item: " + item);
+        var response = await deleteCharacterSpell(item);
+      });
+      spells.forEach(async item => {
+        var response = await insertCharacterSpell(
+          "https://p5nwqhxdk3.execute-api.us-east-1.amazonaws.com/prod/",
+          `{
+          "spellId": "${item}",
+          "userId": "${this.state.uuid}"
+        }`
+        ).then(response =>
+          response.json().then(json => {
+            this.state.characterSpellUUIDs.push(json["uuid"]);
+            return json;
+          })
+        );
+      });
+    }
+  }
+
   async insertInventoryChanges(userId) {
     if (this.state.inventory) {
-      const inventory = this.state.inventory[0];
+      const inventory = this.state.inventory;
       const prevInventory = this.state.inventoryUUIDs;
       prevInventory.forEach(async item => {
-        //var response = await delete
-      }); //need to get inventory uuid here too
-      console.log(prevInventory);
+        console.log("Previous Inventory Item: " + item);
+        var response = await deleteCharacterInventory(item);
+      });
+      console.log("Inventory " + inventory);
       inventory.forEach(async item => {
+        console.log("item new: " + item);
         var response = await insertInventory(
           "https://7l00an9o98.execute-api.us-east-1.amazonaws.com/prod",
           `{
@@ -359,7 +445,6 @@ export default class ModifyCharacter extends Component {
     }
   }
   async componentDidMount() {
-    console.log("Mounting...");
     if (this.props.location.state) {
       this.getCampaignPlayers(
         this.props.location.state.character["campaignId"]["S"]
@@ -371,7 +456,6 @@ export default class ModifyCharacter extends Component {
           return json;
         })
       );
-      console.log("Character Inventory: " + JSON.stringify(characterInventory));
       var inventoryItems = [];
       var inventoryUUIDs = [];
       characterInventory["Items"].forEach(item => {
@@ -381,9 +465,29 @@ export default class ModifyCharacter extends Component {
       console.log("Item IDs " + inventoryItems);
       this.setState({ characterInventory: inventoryItems });
       this.setState({ inventoryUUIDs: inventoryUUIDs });
+      var characterSpells = await getCharacterSpells(this.state.uuid).then(
+        response =>
+          response.json().then(json => {
+            return json;
+          })
+      );
+      var characterSpellIds = [];
+      var characterSpellUUIDs = [];
+      characterSpells["Items"].forEach(item => {
+        characterSpellIds.push(item["spellId"]["S"]);
+        characterSpellUUIDs.push(item["uuid"]["S"]);
+      });
+      console.log("Spell IDs " + characterSpellIds);
+      this.setState({
+        characterSpells: this.removeDuplicates(characterSpellIds)
+      });
+      this.setState({ characterSpellUUIDs: characterSpellUUIDs });
     } else {
       this.setState({ redirect: true });
     }
+  }
+  removeDuplicates(array) {
+    return array.filter((a, b) => array.indexOf(a) === b);
   }
 
   async getCampaignPlayers(campaignId) {

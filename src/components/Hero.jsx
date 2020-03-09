@@ -11,14 +11,7 @@ export default class Hero extends Component {
           height: "1000px"
         }}
       >
-        <div
-          style={{
-            backgroundColor: "white",
-            height: "25em",
-            width: "25em",
-            opacity: "0.5"
-          }}
-        >
+        <div>
           <RegistrationForm />
         </div>
       </div>

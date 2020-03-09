@@ -33,7 +33,6 @@ export default class BaseCharacterSelect extends Component {
   render() {
     var items = [];
     var selected = {};
-    console.log("Items: " + this.props.items);
     if (this.props.items) {
       const entries = Object.entries(this.props.items);
       for (const entry of entries) {
@@ -54,7 +53,6 @@ export default class BaseCharacterSelect extends Component {
       }
     }
     items.push(<MenuItem value="none"> No Player </MenuItem>);
-    console.log(selected);
     return (
       <FormControl onSubmit={this.handleSubmit} className={useStyles}>
         <InputLabel id="demo-simple-select-label">

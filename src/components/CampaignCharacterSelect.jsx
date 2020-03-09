@@ -30,7 +30,6 @@ export default class CampaignCharacterSelect extends Component {
     };
   }
   render() {
-    console.log(this.props.value);
     return (
       <BaseCharacterSelect
         handleChange={this.props.handleChange}

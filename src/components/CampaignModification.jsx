@@ -33,9 +33,7 @@ export default class CampaignModification extends Component {
       <Fragment>
         <p>{this.props.campaign["campaignName"]["S"]}</p>
         <TextField label="Email" onChange={this.handleChange}></TextField>
-        <Button
-          onClick={() => this.handleClick(this.props.campaign["uuid"]["S"])}
-        >
+        <Button onClick={() => this.handleClick(this.props.campaign)}>
           {" "}
           Invite Player{" "}
         </Button>
@@ -53,7 +51,7 @@ export default class CampaignModification extends Component {
     );
 
     var names = [];
-    const entries = Object.entries(campaigns.Items);
+    const entries = Object.entries(campaigns.userDMCampaigns.Items);
     for (const campaign of entries) {
       names.push(campaign[1]["campaignName"]["S"]);
     }
@@ -82,7 +80,8 @@ export default class CampaignModification extends Component {
         `{
          "email": "${this.state.email}",
          "userId": "${uuid}",
-         "campaignId": "${event}",
+         "campaignId": "${event.uuid.S}",
+         "campaignName": "${event.campaignName.S}",
          "dmId": "${UserProfile.getId()}"
         }`
       ).then(response => {});

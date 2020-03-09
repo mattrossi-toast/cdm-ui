@@ -30,11 +30,20 @@ export default class CharacterView extends Component {
       email: "",
       redirectToCharacter: false
     };
-    /* this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);*/
   }
   render() {
     if (this.state.redirectToCharacter) {
+      return (
+        <Redirect
+          push
+          to={{
+            pathname: "/edit-character",
+            state: { character: this.props.character }
+          }}
+        />
+      );
+    }
+    if (this.state.redirectToView) {
       return (
         <Redirect
           push
@@ -46,11 +55,7 @@ export default class CharacterView extends Component {
       );
     }
     return (
-      <TableRow
-        onClick={() => {
-          this.setState({ redirectToCharacter: true });
-        }}
-      >
+      <TableRow>
         <TableCell>{this.props.character["name"]["S"]}</TableCell>
         <TableCell align="right">
           {this.props.character["level"]["S"]}
@@ -63,6 +68,24 @@ export default class CharacterView extends Component {
           {this.props.character["playerEmail"]
             ? this.props.character["playerEmail"]["S"]
             : "N/A"}
+        </TableCell>
+        <TableCell align="right">
+          <Button
+            onClick={() => {
+              this.setState({ redirectToCharacter: true });
+            }}
+          >
+            Edit Character
+          </Button>
+        </TableCell>
+        <TableCell align="right">
+          <Button
+            onClick={() => {
+              this.setState({ redirectToView: true });
+            }}
+          >
+            View Character
+          </Button>
         </TableCell>
       </TableRow>
     );

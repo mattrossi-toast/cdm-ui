@@ -44,7 +44,10 @@ class Modal extends React.Component {
       const entries = Object.entries(this.state.weapons);
       console.log(entries);
       for (const entry of entries) {
-        if (this.props.value.includes(entry[1]["uuid"]["S"])) {
+        if (
+          this.props.value ||
+          this.props.value.includes(entry[1]["uuid"]["S"])
+        ) {
           this.state.options.push(entry[1]["uuid"]["S"]);
         }
         weapons.push(
@@ -68,7 +71,11 @@ class Modal extends React.Component {
       const entries = Object.entries(this.state.armor);
       console.log(entries);
       for (const entry of entries) {
-        if (this.props.value.includes(entry[1]["uuid"]["S"])) {
+        if (
+          this.props.value ||
+          this.props.value.includes(entry[1]["uuid"]["S"])
+        ) {
+          console.log("this.props.value = " + this.props.value);
           this.state.options.push(entry[1]["uuid"]["S"]);
         }
         armor.push(
@@ -120,19 +127,31 @@ class Modal extends React.Component {
     this.setState({ armor: armor });
   }
   handleChange(event) {
-    const options = this.state.options;
+    const options = [];
+    if (this.props.value) {
+      options = this.removeDuplicates(this.props.value);
+    }
     let index;
     if (event.target.checked) {
-      this.props.value.push(event.target.value);
+      if (this.props.value) {
+        this.props.value.push(event.target.value);
+      }
       options.push(event.target.value);
     } else {
       index = options.indexOf(event.target.value);
       options.splice(index, 1);
-      index = this.props.value.indexOf(event.target.value);
+      if (this.props.value) {
+        index = this.props.value.indexOf(event.target.value);
+      }
       this.props.value.splice(index, 1);
+      console.log("Item unchecked: " + options);
     }
+    console.log("Options: " + options);
     this.setState({ options: options });
-    this.props.handleChange(this.state.options);
+    this.props.handleChange(options);
+  }
+  removeDuplicates(array) {
+    return array.filter((a, b) => array.indexOf(a) === b);
   }
 }
 

@@ -7,10 +7,3 @@ body,
   font-family: "Montserrat";
   src: local("Montserrat"), url(./fonts/Montserrat-Black.ttf) format("truetype");
 }
-
-html,
-body,
-#app,
-#app > div {
-  height: 100%;
-}

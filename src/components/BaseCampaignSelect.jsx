@@ -34,6 +34,7 @@ export default class BaseCampaignSelect extends Component {
     const entries = Object.entries(this.props.items);
 
     for (const entry of entries) {
+      console.log("Entry: " + JSON.stringify(entry[1]));
       items.push(
         <MenuItem value={entry[1]["uuid"]["S"]}>
           {entry[1]["campaignName"]["S"]}

@@ -5,6 +5,9 @@ import UserProfile from "./UserProfile";
 import { TextField, Button } from "@material-ui/core";
 import { Redirect } from "react-router-dom";
 import CampaignModification from "./CampaignModification";
+import { LinearProgress } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import Fade from "@material-ui/core/Fade";
 export default class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -54,7 +57,8 @@ export default class Dashboard extends Component {
         return json;
       })
     );
-    var items = campaigns.Items;
-    this.setState({ campaigns: items });
+    var items = campaigns.userDMCampaigns;
+    console.log(JSON.stringify(items));
+    this.setState({ campaigns: items["Items"] });
   }
 }

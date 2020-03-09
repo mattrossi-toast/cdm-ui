@@ -30,7 +30,6 @@ export default class CampaignIdSelect extends Component {
     };
   }
   render() {
-    console.log("Value: " + this.props.value);
     return (
       <BaseCampaignSelect
         handleChange={this.props.handleChange}
@@ -43,18 +42,30 @@ export default class CampaignIdSelect extends Component {
 
   async componentDidMount() {
     var campaigns = await getUserCampaigns(
-      "https://39em985zy4.execute-api.us-east-1.amazonaws.com/prod/c4e0077c-3f5f-48ed-a423-bb58d6de47db"
+      "https://39em985zy4.execute-api.us-east-1.amazonaws.com/prod/" +
+        UserProfile.getId()
     ).then(response =>
       response.json().then(json => {
         return json;
       })
     );
-
-    var names = [];
-    const entries = Object.entries(campaigns.Items);
-    for (const campaign of entries) {
-      names.push(campaign[1]);
+    var allCampaigns = [];
+    console.log("campaigns: " + JSON.stringify(campaigns));
+    for (const campaign of campaigns.userPlayerCampaigns.Items) {
+      console.log(campaign);
+      allCampaigns.push({
+        uuid: campaign.campaignId,
+        campaignName: campaign.campaignName
+      });
     }
-    this.setState({ items: names });
+    for (const campaign of campaigns.userDMCampaigns.Items) {
+      console.log("DM Campaign " + JSON.stringify(campaign));
+      allCampaigns.push({
+        uuid: campaign.uuid,
+        campaignName: campaign.campaignName
+      });
+    }
+    this.setState({ items: allCampaigns });
+    this.setState({ campaignsWhereUserIsDM: campaigns.userDMCampaigns });
   }
 }

@@ -17,4 +17,5 @@ h2 span {
   background: rgb(0, 0, 0); /* fallback color */
   background: rgba(0, 0, 0, 0.4);
   padding: 10px;
+  font-family: "Montserrat";
 }

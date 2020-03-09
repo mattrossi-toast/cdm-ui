@@ -7,6 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/core/Icon";
 import Logo from "../images/logo.png";
 import Login from "./Login";
+import Logout from "./Logout";
 import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
@@ -65,7 +66,9 @@ export default class ButtonAppBar extends Component {
               onClick={this.handleRedirect}
             />
           </Typography>
-          {this.props.isLoggedIn ? <span /> : <Login />}
+          <div className="float-right">
+            {this.props.isLoggedIn ? <Logout /> : <Login />}
+          </div>
         </Toolbar>
       </AppBar>
     );

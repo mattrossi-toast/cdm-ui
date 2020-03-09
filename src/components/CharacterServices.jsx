@@ -12,7 +12,9 @@ export default class CharacterServices extends Component {
         <Container style={containerStyle} maxWidth="sm">
           <h1>Character Services</h1>
           <Link to="/create-character">Create Character</Link>
+          <br></br>
           <Link to="/create-npc">Create Non-Player Character</Link>
+          <br></br>
           <Link to="/view-characters">View Characters</Link>
         </Container>
       </Fragment>

@@ -32,7 +32,6 @@ export default class BaseSelect extends Component {
   render() {
     var items = [];
     const entries = Object.entries(this.props.items);
-    console.log("Reeee: " + this.props.value);
     for (const entry of entries) {
       items.push(<MenuItem value={entry[1]}> {entry[1]} </MenuItem>);
     }
